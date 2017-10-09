@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Tahoma, Geneva, sans-serif;
+      }
+
+      div {
+        display: inline;
+      }
+    </style>
+    <script>
+      var list = [];
+      function updateStats(data) {
+        list = list.concat(data.msg);
+        var msg = list.map(function(line){
+          return "<p>" + line + "</p>";
+        });
+        document.getElementById('rss').innerHTML = msg.join(" ");
+      }
+
+      var host = window.document.location.host;
+      var ws = new WebSocket('ws://' + host);
+      ws.onmessage = function (event) {
+        updateStats(JSON.parse(event.data));
+      };
+    </script>
+  </head>
+  <body>
+    <div id='rss'></div><br>
+  </body>
+</html>
